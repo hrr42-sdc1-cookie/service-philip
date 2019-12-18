@@ -1,21 +1,22 @@
-const mongoose = require('./connect')
+const mongoose = require('./connect');
+
 mongoose.Promise = global.Promise;
 
-let mapperSchema = mongoose.Schema({
+const mapperSchema = mongoose.Schema({
   restaurant_id: Number,
   latitude: Number,
-  longitude: Number
+  longitude: Number,
 });
 
-let Mapper = mongoose.model('Mapper', mapperSchema);
+const Mapper = mongoose.model('Mapper', mapperSchema);
 
-var getAll = () => {
-  let query = Mapper.find({ });
+const getAll = () => {
+  const query = Mapper.find({ });
   return query.exec();
 };
 
-var getOne = (restaurantId) => {
-  let query = Mapper.find({ restaurant_id: restaurantId });
+const getOne = restaurantId => {
+  const query = Mapper.find({ restaurant_id: restaurantId });
   return query.exec();
 };
 
