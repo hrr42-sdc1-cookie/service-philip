@@ -43,7 +43,7 @@ const addReservation = booking => {
   });
 
   // save model to database
-  res.save(err => console.error(err));
+  res.save();
 };
 
 // function to make a reservation.  or not.
