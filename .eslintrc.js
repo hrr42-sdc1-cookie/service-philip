@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     "arrow-parens": ["error", "as-needed"],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "no-console": ["error", {allow: ["log", "warn", "error"]}],
     "no-plusplus": "off",
   },
   env: {
