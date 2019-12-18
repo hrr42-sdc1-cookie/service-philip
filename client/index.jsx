@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App.jsx';
-import Reservation from './components/Reservation.jsx';
-import Mapper from './components/Mapper.jsx';
-import BelowMapper from './components/BelowMapper.jsx';
+import Reservation from './components/Reservation';
+import Mapper from './components/Mapper';
+import BelowMapper from './components/BelowMapper';
 
 ReactDOM.render(<Reservation />, document.getElementById('reservation'));
 ReactDOM.render(<Mapper />, document.getElementById('mapper'));
