@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { GoogleApiWrapper, Map as GoogleMap, Marker } from 'google-maps-react';
+import PropTypes from 'prop-types';
 import apiKey from '../config/googlemaps';
-
 
 const params = (new URL(document.location)).searchParams;
 const restId = parseInt(params.get('restaurantid'), 10) || 92;
@@ -68,6 +68,10 @@ class Map extends Component {
     );
   }
 }
+
+Map.propTypes = {
+  google: PropTypes.shape({}).isRequired,
+};
 
 const MapWrapper = GoogleApiWrapper({ apiKey })(Map);
 
