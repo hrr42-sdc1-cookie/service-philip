@@ -94,22 +94,23 @@ const make = booking => (
   })
 );
 
-const updateReservation = (id, guests, time) => {
-  time = new Date(time);
+const updateReservation = (id, guests, newTime) => {
+  const time = new Date(newTime);
   const minus2 = new Date(time.getTime() - 7200000);
   const plus2 = new Date(time.getTime() + 7200000);
   return Reservation.findOne({
     _id: { $ne: id },
-    reservation_time: { $gte: minus2, $lte: plus2 }
+    reservation_time: { $gte: minus2, $lte: plus2 },
   })
     .then(conflicting => {
-      if (conflicting !== null) { throw `New time conflicts with existing reservation for ${conflicting.guests} at time ${conflicting.reservation_time}`; }
+      if (conflicting !== null) { throw new Error(`New time conflicts with existing reservation for ${conflicting.guests} at time ${conflicting.reservation_time}`); }
       return Reservation.findByIdAndUpdate(id, {
-        guests, reservation_time: time
-      })
+        guests, reservation_time: time,
+      });
     })
     .then(() => `Your reservation has been changed for ${guests} guests at time ${time}`);
-}
+};
+
 module.exports = Reservation;
 module.exports.getAll = getAll;
 module.exports.getByDate = getByDate;
