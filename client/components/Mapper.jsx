@@ -1,93 +1,80 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { GoogleApiWrapper, Map as GoogleMap, Marker } from 'google-maps-react';
-import GOOGLEMAPS_API_KEY from '../config/googlemaps.js';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import apiKey from '../config/googlemaps';
 
-const StyledMap = styled.div`
-  margin: auto;
-	width: 320px;
-	height: 220px;
-  font-family: 'Josefin Sans', sans-serif;
-`;
-
-let params = (new URL(document.location)).searchParams;
-let restId = parseInt(params.get('restaurantid')) || 92;
+const params = (new URL(document.location)).searchParams;
+const restId = parseInt(params.get('restaurantid'), 10) || 92;
 
 class Map extends Component {
-	constructor(props) {
-		super(props);
-		//  restaurant number will be passed into props from overview
-		//  along with street address
-		this.restId = restId || 92;
-		this.restAddress = '1313 Mockingbird Lane';
-		var initialCoords = {
-			latitude: 37.739,
-			longitude: -122.431
-		};
-		this.state = {
-      coords: initialCoords
-		};
-		this.getCoordinates.bind(this);
-		this.getCoordinates(this.restId);
-	}
+  constructor(props) {
+    super(props);
+    //  restaurant number will be passed into props from overview
+    //  along with street address
+    this.restId = restId || 92;
+    this.restAddress = '1313 Mockingbird Lane';
+    const initialCoords = {
+      latitude: 37.739,
+      longitude: -122.431,
+    };
+    this.state = { coords: initialCoords };
+    this.getCoordinates.bind(this);
+    this.getCoordinates(this.restId);
+  }
 
-	getCoordinates(restId) {
-		axios.get(`http://localhost:3002/mapper/${restId}`)
-		.then(res => {
-			var coords = this.state.coords;
-			if (res.data[0] !== undefined && res.data[0] !== {}) {
-				coords.latitude = res.data[0].latitude;
-				coords.longitude = res.data[0].longitude;
-			}
-			coords.gotData = true;
-			this.setState({coords});
-		})
-	}
+  getCoordinates(restaurantid) {
+    axios.get(`http://localhost:3002/mapper/${restaurantid}`)
+      .then(res => {
+        const { coords } = this.state;
+        if (res.data[0] !== undefined && res.data[0] !== {}) {
+          coords.latitude = res.data[0].latitude;
+          coords.longitude = res.data[0].longitude;
+        }
+        coords.gotData = true;
+        this.setState({ coords });
+      });
+  }
 
-	render() {
-		//  prevent call to gmaps before we have gotten our coordinates
-		if (!this.state.coords.gotData) {
-		 	return <div />
-	  }
+  render() {
+    //  prevent call to gmaps before we have gotten our coordinates
+    const { coords } = this.state;
+    const { google } = this.props;
+    if (!coords.gotData) {
+      return <div />;
+    }
 
-		const mapStyle = {
-			marginTop: '20px',
-			marginBottom: '20px',
-			marginLeft: 'auto',
-			marginRight: 'auto',
-			left: '-15px',
-			width: '320px',
-			height: '220px',
-			border: '2px solid lightgrey'
-		};
+    const mapStyle = {
+      marginTop: '20px',
+      marginBottom: '20px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      left: '-15px',
+      width: '320px',
+      height: '220px',
+      border: '2px solid lightgrey',
+    };
 
-		return (
-			<div id="mapper-container">
-				<GoogleMap
-					google={this.props.google}
-					style = {mapStyle}
-					initialCenter={{ lat: this.state.coords.latitude, lng: this.state.coords.longitude}} >
-					<Marker position={{ lat: this.state.coords.latitude, lng: this.state.coords.longitude}} />
-				</GoogleMap>
-				</div>
-		);
-	}
+    return (
+      <div id="mapper-container">
+        <GoogleMap
+          google={google}
+          style={mapStyle}
+          initialCenter={{ lat: coords.latitude, lng: coords.longitude }}
+        >
+          <Marker position={{ lat: coords.latitude, lng: coords.longitude }} />
+        </GoogleMap>
+      </div>
+    );
+  }
 }
 
-const MapWrapper = GoogleApiWrapper({
-	apiKey: GOOGLEMAPS_API_KEY
-})(Map);
+Map.propTypes = {
+  google: PropTypes.shape({}).isRequired,
+};
 
-class Mapper extends Component{
-	render(){
-		return (
-		<div>
-			<MapWrapper/>
-		</div>
-		)
-	}
-}
+const MapWrapper = GoogleApiWrapper({ apiKey })(Map);
+
+const Mapper = () => <div><MapWrapper /></div>;
 
 export default Mapper;

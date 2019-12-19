@@ -6,7 +6,7 @@ module.exports = {
   entry: './client/index.jsx',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   // optimization: {
   //   splitChunks: {
@@ -21,10 +21,13 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
-      }
-    ]
-  }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
 };

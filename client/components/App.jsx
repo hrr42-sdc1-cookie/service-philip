@@ -1,19 +1,10 @@
 //  not clear why these two are necessary
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Mapper from './Mapper.jsx';
-import Reservation from './Reservation.jsx';
-import styled from 'styled-components';
+import Mapper from './Mapper';
+import Reservation from './Reservation';
 
-const StyledApp = styled.div`
-  margin: auto;
-  width: 310px;
-  height: 1200px;
-  font-family: 'Josefin Sans', sans-serif;
-`;
-
-let params = (new URL(document.location)).searchParams;
-let restId = parseInt(params.get('restaurantid')) || 1;
+const params = (new URL(document.location)).searchParams;
+const restId = parseInt(params.get('restaurantid'), 10) || 1;
 
 class App extends React.Component {
   constructor() {
@@ -29,7 +20,7 @@ class App extends React.Component {
         <Reservation />
         <Mapper />
       </div>
-    )
+    );
   }
 }
 
