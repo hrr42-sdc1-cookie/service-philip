@@ -20,6 +20,9 @@ const getOne = restaurantId => {
   return query.exec();
 };
 
+const create = mapperData => Mapper.create(mapperData);
+
 module.exports = Mapper;
 module.exports.getAll = getAll;
 module.exports.getOne = getOne;
+module.exports.createMapper = create;

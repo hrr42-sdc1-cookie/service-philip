@@ -80,6 +80,10 @@ app.get('/mapper/:restaurantId', (req, res) => {
     });
 });
 
+app.post('/mapper', (req, res, next) => Mapper.createMapper(req.body)
+  .then(result => res.json(result))
+  .catch(err => next(err)));
+
 //  get all maps (for testing)
 app.get('/restaurant/all', (req, res) => {
   Restaurant.getAll()
