@@ -88,6 +88,10 @@ app.put('/mapper/:restaurantId', (req, res, next) => Mapper.updateMapper(req.par
   .then(result => res.json(result))
   .catch(err => next(err)));
 
+app.delete('/mapper/:restaurantId', (req, res, next) => Mapper.deleteMapper(req.params.restaurantId)
+  .then(result => res.json(result))
+  .catch(err => next(err)));
+
 //  get all maps (for testing)
 app.get('/restaurant/all', (req, res) => {
   Restaurant.getAll()
