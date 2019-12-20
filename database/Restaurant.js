@@ -23,6 +23,9 @@ const getOne = restaurantId => {
   return query.exec();
 };
 
+const create = restaurantData => Restaurant.create(restaurantData);
+
 module.exports = Restaurant;
 module.exports.getAll = getAll;
 module.exports.getOne = getOne;
+module.exports.createRestaurant = create;
