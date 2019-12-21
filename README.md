@@ -8,6 +8,12 @@ A `nvmrc` file is inlcuded if using [nvm](https://github.com/creationix/nvm)
 
 ## CRUD API
 
+A completed CRUD api using the inherited database (MongoDB) is present in the at the commit tagged, `crud`. To get there:
+
+```bash
+git checkout crud
+```
+
 ### Restaurants
 
 - GET `/restaurant/all` - Get data for all restaurants
