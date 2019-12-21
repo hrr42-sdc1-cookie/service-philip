@@ -58,6 +58,12 @@ app.put('/reservation/:reservationId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/reservation/:reservationId', (req, res, next) => {
+  Reservation.deleteReservation(req.params.reservationId)
+    .then(result => res.json(result))
+    .catch(err => next(err));
+});
+
 //  get all maps (for testing)
 app.get('/mapper/all', (req, res) => {
   Mapper.getAll()

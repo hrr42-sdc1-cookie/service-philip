@@ -111,8 +111,15 @@ const updateReservation = (id, guests, newTime) => {
     .then(() => `Your reservation has been changed for ${guests} guests at time ${time}`);
 };
 
+const deleteReservation = id => Reservation.findByIdAndDelete(id)
+  .then(result => {
+    if (result === null) { throw new Error('Reservation not found'); }
+    return `Your reservation for ${result.guests} has been deleted`;
+  });
+
 module.exports = Reservation;
 module.exports.getAll = getAll;
 module.exports.getByDate = getByDate;
 module.exports.make = make;
 module.exports.updateReservation = updateReservation;
+module.exports.deleteReservation = deleteReservation;
