@@ -122,6 +122,18 @@ app.get('/restaurant/:restaurantId', (req, res) => {
     });
 });
 
+app.post('/restaurant', (req, res, next) => Restaurant.createRestaurant(req.body)
+  .then(result => res.json(result))
+  .catch(err => next(err)));
+
+app.put('/restaurant/:restaurantId', (req, res, next) => Restaurant.updateRestaurant(req.params.restaurantId, req.body)
+  .then(result => res.json(result))
+  .catch(err => next(err)));
+
+app.delete('/restaurant/:restaurantId', (req, res, next) => Restaurant.deleteRestaurant(req.params.restaurantId)
+  .then(result => res.json(result))
+  .catch(err => next(err)));
+
 const port = 3002;
 
 app.listen(port, () => console.log(`listening on port ${port}`));
