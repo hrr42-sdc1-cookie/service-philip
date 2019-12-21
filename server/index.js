@@ -54,7 +54,7 @@ app.post('/reservation', (req, res) => {
 app.put('/reservation/:reservationId', (req, res, next) => {
   const { guests, time } = req.body;
   Reservation.updateReservation(req.params.reservationId, guests, time)
-    .then((...booking) => res.json(booking))
+    .then(booking => res.json(booking))
     .catch(err => next(err));
 });
 
