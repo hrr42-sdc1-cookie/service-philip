@@ -1,0 +1,82 @@
+const cliProgress = require('cli-progress');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const faker = require('faker');
+
+const restaurantCsvWriter = createCsvWriter({
+  path: 'dataGeneration/restaurants.csv',
+  header: [
+    { id: 'id', title: 'id' },
+    { id: 'name', title: 'name' },
+    { id: 'seats', title: 'seats' },
+    { id: 'tables', title: 'tables' },
+    { id: 'latitude', title: 'latitude' },
+    { id: 'longitude', title: 'longitude' },
+  ],
+});
+
+const reservationCsvWriter = createCsvWriter({
+  path: 'dataGeneration/reservations.csv',
+  header: [
+    { id: 'restaurantId', title: 'restaurantId' },
+    { id: 'customerName', title: 'customerName' },
+    { id: 'reservationTime', title: 'reservationTime' },
+    { id: 'guestCount', title: 'guestCount' },
+  ],
+});
+
+const generateData = (restaurantCount, minReservations, maxReservations) => {
+  const seatLimits = { min: 10, max: 250 };
+  const guestLimits = { min: 2, max: 8 };
+  const reservationLimits = { min: minReservations, max: maxReservations };
+
+  const progressBar = new cliProgress.SingleBar({
+    hideCursor: true,
+    fps: 1,
+    format: '{bar} {percentage}% | Elapsed: {duration_formatted}',
+  }, cliProgress.Presets.shades_classic);
+
+  progressBar.start(restaurantCount);
+
+  let seats;
+  let i = 0;
+  const csvBatchSize = 10 ** 4;
+
+  const writeBatch = () => {
+    const remainingRecords = restaurantCount - i;
+    if (remainingRecords) {
+      const batchLimit = Math.min(csvBatchSize, remainingRecords);
+      const restaurants = [];
+      const reservations = [];
+      let reservationCount;
+      for (let j = 0; j < batchLimit; j++) {
+        seats = faker.random.number(seatLimits);
+        reservationCount = faker.random.number(reservationLimits);
+        restaurants.push({
+          id: i,
+          name: `The ${faker.company.companyName()} Food ${faker.company.companySuffix()}`,
+          seats,
+          tables: faker.random.number({ min: seats / 4, max: seats / 3 }),
+          latitude: faker.address.latitude(),
+          longitude: faker.address.longitude(),
+        });
+        for (let k = 0; k < reservationCount; k++) {
+          reservations.push({
+            restaurantId: i,
+            customerName: faker.name.firstName(),
+            reservationTime: faker.date.future(5).getTime(),
+            guestCount: faker.random.number(guestLimits),
+          });
+        }
+        progressBar.update(++i);
+      }
+      restaurantCsvWriter.writeRecords(restaurants)
+        .then(() => reservationCsvWriter.writeRecords(reservations))
+        .then(() => writeBatch());
+    } else {
+      progressBar.stop();
+    }
+  };
+  writeBatch();
+};
+
+generateData(10 ** 7, 1, 30);
