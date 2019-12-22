@@ -11,7 +11,8 @@
     "build": "webpack -d --watch",
     "db:setup": "node database/seed.js",
     "test:faker": "node database/test.js",
-    "test": "jest"
+    "test": "jest",
+    "csv10M": "node dataGeneration/generate.js 1 7"
   },
   "dependencies": {
     "axios": "^0.19.0",
