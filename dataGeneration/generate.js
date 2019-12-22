@@ -1,9 +1,22 @@
 const cliProgress = require('cli-progress');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const faker = require('faker');
+const path = require('path');
+
+const [,, significand, magnitude] = process.argv
+  .map(val => (Number.isNaN(Number(val)) ? val : Number(val)));
+if (Number.isNaN(Number(significand)) || Number.isNaN(Number(magnitude))) {
+  const scriptname = path.basename(__filename);
+  console.log(
+    `usage: node ${scriptname} SIGNIFICAND MAGNITUDE\n`
+    + `Example: node ${scriptname} 1.42 6\n`
+    + '(Generates 1.42x10^6, or 1,420,000 primary records)',
+  );
+  process.exit();
+}
 
 const restaurantCsvWriter = createCsvWriter({
-  path: 'dataGeneration/restaurants.csv',
+  path: path.resolve(__dirname, 'restaurants.csv'),
   header: [
     { id: 'id', title: 'id' },
     { id: 'name', title: 'name' },
@@ -15,7 +28,7 @@ const restaurantCsvWriter = createCsvWriter({
 });
 
 const reservationCsvWriter = createCsvWriter({
-  path: 'dataGeneration/reservations.csv',
+  path: path.resolve(__dirname, 'reservations.csv'),
   header: [
     { id: 'restaurantId', title: 'restaurantId' },
     { id: 'customerName', title: 'customerName' },
@@ -79,4 +92,4 @@ const generateData = (restaurantCount, minReservations, maxReservations) => {
   writeBatch();
 };
 
-generateData(10 ** 7, 1, 30);
+generateData(significand * 10 ** magnitude, 1, 30);
