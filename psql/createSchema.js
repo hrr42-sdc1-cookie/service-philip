@@ -20,6 +20,7 @@ const createTables = `
     time TIMESTAMP NOT NULL,
     guestCount SMALLINT NOT NULL
   );
+  CREATE INDEX resIndex ON reservations(restaurantId);
 `;
 
 module.exports = {

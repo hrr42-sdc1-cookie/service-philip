@@ -1,12 +1,13 @@
 const path = require('path');
 const { client, schemaPromise } = require('./createSchema');
 
-const restaurantCsvPath = path.resolve(__dirname, '../dataGeneration/restaurants100k.csv');
-const reservationCsvPath = path.resolve(__dirname, '../dataGeneration/reservations100k.csv');
+const restaurantCsvPath = path.resolve(__dirname, '../dataGeneration/restaurants.csv');
+const reservationCsvPath = path.resolve(__dirname, '../dataGeneration/reservations.csv');
 
 const dropForeignKey = `
   ALTER TABLE reservations DROP CONSTRAINT IF EXISTS reservations_restaurantid_fkey;
 `;
+const dropIndex = 'DROP INDEX IF EXISTS resIndex;';
 const restaurantCopy = `
   COPY restaurants(id,name,seats,tables,latitude,longitude)
   FROM '${restaurantCsvPath}' DELIMITER ',' CSV HEADER;
@@ -20,14 +21,19 @@ const replaceForeignKey = `
   ALTER TABLE reservations ADD CONSTRAINT reservations_restaurantid_fkey
   FOREIGN KEY (restaurantid) REFERENCES restaurants (id);
 `;
+const replaceIndex = 'CREATE INDEX resIndex ON  reservations(restaurantId);';
 
 const time = () => (new Date()).toLocaleTimeString();
 
 let d = Date.now();
 schemaPromise
   .then(() => {
-    console.log(time(), 'Removing foreign key from reservations');
+    console.log(time(), 'Removing foreign key from reservations...');
     return client.query(dropForeignKey);
+  })
+  .then(() => {
+    console.log(time(), 'Removing index from reservations...');
+    return client.query(dropIndex);
   })
   .then(() => {
     console.log(time(), 'Seeding...');
@@ -46,7 +52,11 @@ schemaPromise
     return client.query(replaceForeignKey);
   })
   .then(() => {
-    console.log(time(), `Foreign key for reservations replaced in ${(-d + (d = Date.now())) / 1000} seconds`);
+    console.log(time(), `Foreign key for reservations replaced in ${(-d + (d = Date.now())) / 1000} seconds...`);
+    return client.query(replaceIndex);
+  })
+  .then(() => {
+    console.log(time(), `Index for reservations replaced in ${(-d + (d = Date.now())) / 1000} seconds...`);
     console.log('Seeded database is ready to rock.');
   })
   .catch(err => console.log(err))
