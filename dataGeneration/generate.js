@@ -76,7 +76,7 @@ const generateData = (restaurantCount, minReservations, maxReservations) => {
           reservations.push({
             restaurantId: i,
             customerName: faker.name.firstName(),
-            reservationTime: faker.date.future(5).getTime(),
+            reservationTime: faker.date.future(5).toISOString(),
             guestCount: faker.random.number(guestLimits),
           });
         }
