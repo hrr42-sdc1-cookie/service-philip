@@ -31,3 +31,7 @@ client/config/*
 
 #Seeding data
 dataGeneration/*.csv
+
+# Database config
+psql/config/*
+!psql/config/*example*
