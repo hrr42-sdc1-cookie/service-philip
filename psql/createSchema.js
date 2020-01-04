@@ -1,5 +1,7 @@
 const client = require('./connectClient');
 
+const schemaOnly = (process.argv[2] || '').toLowerCase() === 'schemaonly';
+
 const createTables = `
   DROP TABLE IF EXISTS reservations;
   DROP TABLE IF EXISTS restaurants;
@@ -20,10 +22,11 @@ const createTables = `
   );
 `;
 
-client
-  .query(createTables)
-  .then(() => {
-    console.log('Schema is ready to rock.');
-    client.end();
-  })
-  .catch(err => console.log(err));
+module.exports = {
+  client,
+  schemaPromise: client
+    .query(createTables)
+    .then(() => console.log('Schema is ready to rock.'))
+    .catch(err => console.log(err))
+    .finally(() => { if (schemaOnly) { client.end(); } }),
+};

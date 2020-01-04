@@ -13,8 +13,8 @@
     "test:faker": "node database/test.js",
     "test": "jest",
     "csv10M": "node dataGeneration/generate.js 1 7",
-    "psql:schema": "node psql/createSchema.js",
-    "psql:seed": "npm run psql:schema && node psql/seed.js"
+    "psql:schema": "node psql/createSchema.js schemaOnly",
+    "psql:seed": "node psql/seed.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
