@@ -14,8 +14,4 @@ const client = new Client({
 client.connect()
   .catch(err => console.log(err));
 
-client.query('SELECT NOW()', (err, res) => {
-  console.log('there');
-  console.log(err, res);
-  client.end();
-});
+module.exports = client;
