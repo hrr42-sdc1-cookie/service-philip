@@ -25,7 +25,9 @@ build/
 dist/
 public/dist/
 
+#APIs
 client/config/*
 !client/config/*example*
 
-fec.pem
+#Seeding data
+dataGeneration/*.csv

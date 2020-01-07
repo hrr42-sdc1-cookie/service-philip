@@ -11,7 +11,8 @@
     "build": "webpack -d --watch",
     "db:setup": "node database/seed.js",
     "test:faker": "node database/test.js",
-    "test": "jest"
+    "test": "jest",
+    "csv10M": "node dataGeneration/generate.js 1 7"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -35,7 +36,9 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.6",
     "babel-preset-airbnb": "^4.4.0",
+    "cli-progress": "^3.4.0",
     "css-loader": "^3.2.1",
+    "csv-writer": "^1.5.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^6.1.0",
