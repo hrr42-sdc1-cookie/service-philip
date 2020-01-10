@@ -17,20 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//  get all reservations (for testing)
-app.get('/reservation/all', (req, res) => {
-  Reservation.getAll()
-    .then(reservations => {
-      res.write(JSON.stringify(reservations));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
-});
-
 //  check if reservation can be accepted and add to the database if so
 app.post('/reservation', (req, res) => {
   //  post if you can; return success
@@ -51,20 +37,6 @@ app.post('/reservation', (req, res) => {
     });
 });
 
-//  get all maps (for testing)
-app.get('/mapper/all', (req, res) => {
-  Mapper.getAll()
-    .then(maps => {
-      res.write(JSON.stringify(maps));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error occurred: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
-});
-
 //  get restaurant geolocator for call to google maps api
 app.get('/mapper/:restaurantId', (req, res) => {
   const { restaurantId } = req.params;
@@ -75,20 +47,6 @@ app.get('/mapper/:restaurantId', (req, res) => {
     })
     .catch(err => {
       console.log('Error occurred: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
-});
-
-//  get all maps (for testing)
-app.get('/restaurant/all', (req, res) => {
-  Restaurant.getAll()
-    .then(restaurants => {
-      res.write(JSON.stringify(restaurants));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error occurred:', err);
       res.status(500).send(new Error(err));
       res.end();
     });
