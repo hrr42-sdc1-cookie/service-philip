@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { createReservation } = require('../psql/dbFunctions');
 const Mapper = require('../database/Mapper.js');
-const Restaurant = require('../database/Restaurant.js');
 
 const app = express();
 
@@ -30,21 +29,6 @@ app.get('/mapper/:restaurantId', (req, res) => {
   Mapper.getOne(restaurantId)
     .then(map => {
       res.write(JSON.stringify(map));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error occurred: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
-});
-
-//  get restaurant geolocator for call to google maps api
-app.get('/restaurant/:restaurantId', (req, res) => {
-  const { restaurantId } = req.params;
-  Restaurant.getOne(restaurantId)
-    .then(restaurant => {
-      res.write(JSON.stringify(restaurant));
       res.end();
     })
     .catch(err => {
