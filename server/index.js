@@ -51,19 +51,6 @@ app.post('/reservation', (req, res) => {
     });
 });
 
-app.put('/reservation/:reservationId', (req, res, next) => {
-  const { guests, time } = req.body;
-  Reservation.updateReservation(req.params.reservationId, guests, time)
-    .then(booking => res.json(booking))
-    .catch(err => next(err));
-});
-
-app.delete('/reservation/:reservationId', (req, res, next) => {
-  Reservation.deleteReservation(req.params.reservationId)
-    .then(result => res.json(result))
-    .catch(err => next(err));
-});
-
 //  get all maps (for testing)
 app.get('/mapper/all', (req, res) => {
   Mapper.getAll()
@@ -93,18 +80,6 @@ app.get('/mapper/:restaurantId', (req, res) => {
     });
 });
 
-app.post('/mapper', (req, res, next) => Mapper.createMapper(req.body)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
-
-app.put('/mapper/:restaurantId', (req, res, next) => Mapper.updateMapper(req.params.restaurantId, req.body)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
-
-app.delete('/mapper/:restaurantId', (req, res, next) => Mapper.deleteMapper(req.params.restaurantId)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
-
 //  get all maps (for testing)
 app.get('/restaurant/all', (req, res) => {
   Restaurant.getAll()
@@ -133,18 +108,6 @@ app.get('/restaurant/:restaurantId', (req, res) => {
       res.end();
     });
 });
-
-app.post('/restaurant', (req, res, next) => Restaurant.createRestaurant(req.body)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
-
-app.put('/restaurant/:restaurantId', (req, res, next) => Restaurant.updateRestaurant(req.params.restaurantId, req.body)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
-
-app.delete('/restaurant/:restaurantId', (req, res, next) => Restaurant.deleteRestaurant(req.params.restaurantId)
-  .then(result => res.json(result))
-  .catch(err => next(err)));
 
 const port = 3002;
 
