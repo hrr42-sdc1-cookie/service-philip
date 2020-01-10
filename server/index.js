@@ -1,7 +1,7 @@
 //  API server
 const express = require('express');
 const bodyParser = require('body-parser');
-const Reservation = require('../database/Reservation.js');
+const { createReservation } = require('../psql/dbFunctions');
 const Mapper = require('../database/Mapper.js');
 const Restaurant = require('../database/Restaurant.js');
 
@@ -18,23 +18,10 @@ app.use((req, res, next) => {
 });
 
 //  check if reservation can be accepted and add to the database if so
-app.post('/reservation', (req, res) => {
-  //  post if you can; return success
-  //  if post not allowed, return error message
-  //  errors can be: username already has a reservation,
-  //    reservation overlaps too many (too many tables used)
-  const booking = req.body;
-
-  Reservation.make(booking)
-    .then(notification => {
-      res.write(JSON.stringify(notification));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error occurred: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
+app.post('/reservation', (req, res, next) => {
+  createReservation(req.body)
+    .then(result => res.json(result))
+    .catch(err => next(err));
 });
 
 //  get restaurant geolocator for call to google maps api
