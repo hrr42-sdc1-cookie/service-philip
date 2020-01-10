@@ -1,8 +1,7 @@
 //  API server
 const express = require('express');
 const bodyParser = require('body-parser');
-const { createReservation } = require('../psql/dbFunctions');
-const Mapper = require('../database/Mapper.js');
+const { createReservation, getLocation } = require('../psql/dbFunctions');
 
 const app = express();
 
@@ -24,18 +23,10 @@ app.post('/reservation', (req, res, next) => {
 });
 
 //  get restaurant geolocator for call to google maps api
-app.get('/mapper/:restaurantId', (req, res) => {
-  const { restaurantId } = req.params;
-  Mapper.getOne(restaurantId)
-    .then(map => {
-      res.write(JSON.stringify(map));
-      res.end();
-    })
-    .catch(err => {
-      console.log('Error occurred: ', err);
-      res.status(500).send(new Error(err));
-      res.end();
-    });
+app.get('/mapper/:restaurantId', (req, res, next) => {
+  getLocation(req.params.restaurantId)
+    .then(result => res.json(result))
+    .catch(err => next(err));
 });
 
 const port = 3002;

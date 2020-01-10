@@ -33,6 +33,13 @@ const createReservation = ({
     });
 };
 
+const getLocation = restaurantId => {
+  const select = 'SELECT latitude, longitude FROM restaurants WHERE id = $1';
+  const selectValues = [restaurantId];
+  return client.query(select, selectValues)
+    .then(({ rows }) => rows);
+};
+
 module.exports = {
-  createReservation,
+  createReservation, getLocation,
 };
